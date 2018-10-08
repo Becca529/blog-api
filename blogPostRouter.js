@@ -24,27 +24,67 @@ router.post('/', jsonParser, (req, res) => {
     if (missingReqFieldsMessage){
         res.status(400).send(missingReqFieldsMessage);
     }
-
+    else {
     //create blog post and update status to 201
-    const post = BlogPosts.create (req.body.title, req.body.content, req.body.author, req.body.publishDate)
-    res.status(201).json(item);
+        const post = BlogPosts.create (req.body.title, req.body.content, req.body.author, req.body.publishDate)
+        res.status(201).json(post);
+    }
 });
 
-function validateReqFields(requiredFields, req) {
-    
-};
-
 router.put('/:id', jsonParser, (req, res) =>{
-    
+    const misMatchtedIDs = validateMatchingIDs(req);
+    const requiredFields = ['title', 'content', 'author', 'publishDate'];
+    const missingReqFieldsMessage = validateReqFields(requiredFields, req);
+   
     //checks if matching ids
+    if (misMatchtedIDs){
+        res.status(400).send(misMatchtedIDs);
+    }
     //validate fields and send status message if error
+    else if (missingReqFieldsMessage){
+        res.status(400).send(missingReqFieldsMessage);
+    }
     //update blog post and send successful status
-    });
+    else {
+        console.log(`Updating blog post \`${req.params.id}\``);
+        BlogPosts.update({
+          id: req.params.id,
+          title: req.body.title,
+          body: req.body.body,
+          author: req.body.author,
+          publishDate: req.body.publishDate
+        });
+        res.status(204).end();
+    }
+});
 
 router.delete('/:id', (req, res) => {
-    
-    //checks if matching ids
     BlogPosts.delete(req.params.id);
     console.log(`Deleted blog list \`${req.params.ID}\``);
     res.status(204).end();
 });
+
+function validateReqFields(requiredFields, req){
+    //for (const index of requiredFields) {
+    for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+        if (!(field in req.body)) {
+            const message = `Missing \`${field}\` in request body`
+            console.error(message);
+            return message;
+            }
+          }
+        return null;
+};
+
+function validateMatchingIDs (req) {
+    if (req.params.id !== req.body.id){
+      const message = `Request path id (${req.params.id}) and request body id (${req.body.id}) must match`;
+      console.error(message);
+      return message;
+    }
+    return null;
+  };
+
+
+module.exports = router;
