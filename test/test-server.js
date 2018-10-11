@@ -1,14 +1,14 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const {app, closeServer, runServer} = require('../server');
+const {app, runServer, closeServer} = require('../server');
 
 const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe('BlogPosts', function (){
-    Before(function(){
+describe('Blog Posts', function (){
+    before(function(){
         return runServer();
     });
 
@@ -17,12 +17,21 @@ describe('BlogPosts', function (){
     });
 
     //GET request tests
-    it('should list blogpost on GET request', function(){
+    it('should list blogposts on GET request', function(){
         return chai.request(app)
-            .get('/users')
+            .get("/blog-posts")
             .then(function(res){
-                expect(res).to.have.status()
-            })
+                //expect(res).to.have.status(200);
+                expect(res).to.be.json;
+                expect(res.body).to.be.a('array');
+                expect(res.body.length).to.be.at.least(1);
+                const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
+                res.body.forEach(function(item) {
+                    expect(item).to.be.a('object');
+                    expect(item).to.include.keys(expectedKeys);
+                });
+            });
+    });
 
-    })
-})
+
+});

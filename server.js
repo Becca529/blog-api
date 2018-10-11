@@ -6,13 +6,14 @@ const app = express();
 
 const blogPostRouter = require('./blogPostRouter');
 
+app.use(express.json());
 //app.use(morgan('common'));
 
 //app.use(express.static('public'));
 
 
 app.use('/blog-posts', blogPostRouter);
-console.log("server.js file")
+
 
 let server;
 
