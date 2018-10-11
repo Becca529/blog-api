@@ -22,13 +22,11 @@ router.post('/', jsonParser, (req, res) => {
     const requiredFields = ['title', 'content', 'author', 'publishDate'];
     const missingReqFieldsMessage = validateReqFields(requiredFields, req);
     if (missingReqFieldsMessage){
-        res.status(400).send(missingReqFieldsMessage);
+        return res.status(400).send(missingReqFieldsMessage);
     }
-    else {
     //create blog post and update status to 201
-        const post = BlogPosts.create (req.body.title, req.body.content, req.body.author, req.body.publishDate)
-        res.status(201).json(post);
-    }
+    const post = BlogPosts.create (req.body.title, req.body.content, req.body.author, req.body.publishDate)
+    res.status(201).json(post);
 });
 
 router.put('/:id', jsonParser, (req, res) =>{
@@ -38,24 +36,25 @@ router.put('/:id', jsonParser, (req, res) =>{
    
     //checks if matching ids
     if (misMatchtedIDs){
-        res.status(400).send(misMatchtedIDs);
+        return res.status(400).send(misMatchtedIDs);
     }
     //validate fields and send status message if error
-    else if (missingReqFieldsMessage){
-        res.status(400).send(missingReqFieldsMessage);
+    if (missingReqFieldsMessage){
+        console.error(missingReqFieldsMessage);
+        return res.status(400).send(missingReqFieldsMessage);
+        
     }
     //update blog post and send successful status
-    else {
-        console.log(`Updating blog post \`${req.params.id}\``);
-        BlogPosts.update({
+    console.log(`Updating blog post \`${req.params.id}\``);
+    BlogPosts.update({
           id: req.params.id,
           title: req.body.title,
           body: req.body.body,
           author: req.body.author,
           publishDate: req.body.publishDate
         });
-        res.status(204).end();
-    }
+    return res.status(204).end();
+
 });
 
 router.delete('/:id', (req, res) => {
@@ -77,13 +76,9 @@ function validateReqFields(requiredFields, req){
         return null;
 };
 
+
 function validateMatchingIDs (req) {
-    if (req.params.id !== req.body.id){
-      const message = `Request path id (${req.params.id}) and request body id (${req.body.id}) must match`;
-      console.error(message);
-      return message;
-    }
-    return null;
+    return req.paras.id !== req.body.id ? `Request path id (${req.params.id}) and request body id (${req.body.id}) must match` : null;
   };
 
 
