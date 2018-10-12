@@ -1,2 +1,10 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: SwIKqRaLzH0ehWtUCo0Ik4338L00zNYO6tS0Y7xCMD7eQaEYVEQ+swe0+xG8sWoBMtyfMyX9W7hj1M193XwP/ah+LeLyfNRKiPAEROBiSDO607XW1ecMuGVr8nvV9sm429G2nAVXNt7UFCekxBnla//sk0TcaUDVRy6VWMJULiPJpl2lE9sSPM9JUvj8O+Y8fD8jTmEWBczZjsjshJWh7luPLKnWKhziAVY550kdD04AIQl6Kw3PVv7aSd4v689RQQMV0FeY+PHYt7wDGclVN9eJHu8dF70ZQnuu5Wt2G/3o1jUO8PV66sxGzcEGIVm5NPuAmJP0gp6aRj2PTIZzwP2BtQA7XpGSXksg7As1n2RueayDCeNUlnruZ61SdRFTSxJnTeN9McVMFRgq0RmwGBb5vGPQHu5a5AE4KAu4mQOsY0CvlNgGWQYfC0e9argFz/g/W3W4Pp+FQrjE5H2Ak8CyqOodlcb+1tmigk21MeRzYW6/FXUupdMbZRG7c0lfN9dvcZtpyHCV/8nN5qvRrJN0T7JLgypjjOPjmAnGUOsL45MJZK2V2NSTwehRf+rHYyovopuhJ9XNCu4F8WC91xhC7ZThkljG+Tkqip1MvdbMrF3qZO8xiQsoechpbfQsbSq1LOHDM6mLcIiaIQO03laCmqgx1bjwsJl+A94rA1Y=
+  app: guarded-forest-20544
+  on:
+    repo: Becca529/blog-api
+    branch: test-cases
